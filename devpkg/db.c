@@ -91,9 +91,15 @@ int DB_init(void)
   apr_pool_create(&p, NULL);
 
   if (access(DB_DIR, W_OK | X_OK) == -1) {
+<<<<<<< HEAD
     apr_status_t rc = apr_dir_make_recursive(DB_DIR, APR_FPROT_UREAD | APR_FPROT_UWRITE |
 					     APR_FPROT_UEXECUTE | APR_FPROT_GREAD | APR_FPROT_GWRITE |
 					     APR_FPROT_GEXECUTE, p);
+=======
+    apr_status_t rc = apr_dir_make_recursive(DB_DIR, APR_UREAD | APR_UWRITE |
+					     APR_UEXECUTE | APR_GREAD | APR_GWRITE |
+					     APR_GEXECUTE, p);
+>>>>>>> 5ec1972f98a262f2931bdad2d5bfea80a59fdb97
     check(rc == APR_SUCCESS, "Failed to make database dir: %s", DB_DIR);
   }
 
