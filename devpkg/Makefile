@@ -5,12 +5,9 @@ LDFLAGS=-L${PREFIX}/apr/lib/ -lapr-1 -pthread -laprutil-1
 
 all: devpkg
 
-<<<<<<< HEAD
+#devpkg: bstrlib.o db.o shell.o commands.o
 devpkg: devpkg.c bstrlib.o db.o shell.o commands.o
 	cc ${CFLAGS} $? ${LDFLAGS} -o $@
-=======
-devpkg: bstrlib.o db.o shell.o commands.o
->>>>>>> 5ec1972f98a262f2931bdad2d5bfea80a59fdb97
 
 install: all
 	install -d $(DESTDIR)/$(PREFIX)/bin/

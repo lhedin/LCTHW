@@ -1,0 +1,7 @@
+
+Install or list software.
+
+devpkg [options] [URL]
+
+-I <url> Install new software. Example:
+   	 devpkg -I 
