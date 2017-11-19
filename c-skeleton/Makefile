@@ -1,24 +1,19 @@
-CFLAGS = -g -O0 -Wall -Wextra -Isrc -rdynamic $(OPTFLAGS)
-#-DNDEBUG
+CFLAGS = -g -02 -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(OPTFLAGS)
 LIBS = -ldl $(OPTLIBS)
 PREFIX ?= /usr/local
 SHELL = /bin/sh
 
-SOURCES = $(wildcard src/lcthw/**/*.c src/lcthw/*.c)
+SOURCES = $(wildcard src/**/*.c src/*.c)
 OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 
 TEST_SRC = $(wildcard tests/*_tests.c)
 TESTS = $(patsubst %.c,%,$(TEST_SRC))
 
-PROGRAMS_SRC = $(wildcard bin/*.c)
-PROGRAMS = $(patsubst %.c,%,$(PROGRAMS_SRC))
-#PROGRAMS = $(patsubst %.a,%.so,$(TARGET))
-
-TARGET = build/liblcthw.a
+TARGET = build/libYOUR_LIBRARY.a
 SO_TARGET = $(patsubst %.a,%.so,$(TARGET))
 
 # The Target Build
-all: $(TARGET) $(SO_TARGET) tests $(PROGRAMS)
+all: $(TARGET) $(SO_TARGET) tests
 
 dev: CFLAGS=-g -Wall -Isrc -Wextra $(OPTFLAGS)
 dev: all
@@ -37,22 +32,16 @@ build:
 
 # The Unit Tests
 .PHONY: tests
-#tests: CFLAGS += $(TARGET)
-tests:  LDLIBS += -lm -L./build -llcthw
+tests: CFLAGS += $(TARGET)
 tests: $(TESTS)
 	sh ./tests/runtests.sh
-
-#cc -g -O0 -Wall -Wextra -Isrc -rdynamic -DNDEBUG  
-# tests/list_algos_tests.c build/liblcthw.a -o tests/list_algos_tests -lm
-$(TESTS): $(TARGET)
-	$(CC) $(CFLAGS) $@.c $< -o $@ -lm
 
 valgrind:
 	VALGRIND="valgrind --log-file=/tmp/valgrind-%p.log" $(MAKE)
 
 # The Cleaner
 clean:
-	rm -rf build $(OBJECTS) $(TESTS) $(PROGRAMS)
+	rm -rf build $(OBJECTS) $(TESTS)
 	rm -f tests/tests.log
 	find . -name "*.gc*" -exec rm {} \;
 	rm -rf 'find . -name "*.dSYM" -print'
@@ -68,7 +57,5 @@ check:
 	@echo Files with potentially dangerous functions.
 	@egrep $(BADFUNCS) $(SOURCES) || true
 
-#$(PROGRAMS): CFLAGS += $(TARGET)
-$(PROGRAMS): $(TARGET)
-	$(CC) $(CFLAGS) $@.c -o $@ $<
+
 
